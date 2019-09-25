@@ -1,0 +1,125 @@
+import java.util.Scanner;
+/*This project was to create a tic-tac-toe game by creating a three dimensional array called board.
+ * This code uses 4 methods in which are used to make the game board, determine if there is a move 
+ * to be made, if the game resulted in a winner, and if the game resulted in a draw. Tic-tac-toe is
+ * a game in which there a two players which specify by character, either an X or an O.  The are 9 
+ * spaces in a 3x3 grid, in which a character can make make a move. A winner is determined if one 
+ * player achieves 3 of their characters in a row.  If the board is full and no player has 3 in a
+ * row the game is resulted in a draw.  In the code, the array is initialized to consist of all spaces,
+ * and then is manipulated to show the characters that the players want to play and in the position
+ * they want to play them.
+ */
+public class LRTicTacToe //the class for the tic-tac-toe game
+{
+	public static void main(String[] args) //creating the main method
+	{
+		char[][] board = new char[3][3]; //creating a new 3x3 array(board)
+		char player = 'X'; //creating a char player and initializing it to X
+		board[0][0] = ' '; //initializing the 9 board spaces
+		board[0][1] = ' ';
+		board[0][2] = ' ';
+		board[1][0] = ' ';
+		board[1][1] = ' ';
+		board[1][2] = ' ';
+		board[2][0] = ' ';
+		board[2][1] = ' ';
+		board[2][2] = ' ';
+		
+		displayBoard(board); //using the method displayboard() and passing it board
+		makeAMove(board, player); //using the method makeAMove() and passing it board and player
+	}
+	//The method makeAMove() is to prompt the user to enter position if there is one available or
+	//if a winner has not yet been declared and then place the variable in the position
+	public static void makeAMove(char[][] board, char player)
+	{
+		char current = 'F'; //This variable is to determine which player is currently in that position
+		while ((current = isWon(current, board)) == 'F' && isDraw(board) == 'F')
+		{
+			Scanner input = new Scanner(System.in); //creating a scanner, input
+			int row, column; //creating row and column variables and the prompting user to enter their values
+			System.out.print("Enter a row (0, 1, or 2) for player " + player + ": ");
+			row = input.nextInt();
+			System.out.print("Enter a column (0, 1, or 2) for player " + player + ": ");
+			column = input.nextInt();
+			if (row > 2 || row < 0 || column > 2 || column < 0) //checking if the row value is out of bounds
+			{
+				System.out.println("The position entered is invalid."); //telling the user it is invalid
+				continue; //ending the current iteration
+			}
+			if (board[column][row] != ' ') //checking to see if the spaces entered is occupied
+			{
+				System.out.print("The postition that player " + player + " entered is already taken. ");
+				continue; //ending the current iteration
+			}
+			else
+			{
+				board[column][row] = player; //setting the position as the current player character
+				if (player == 'O')
+				{
+					player = 'X';
+				}
+				else
+				{
+					player = 'O';
+				}
+			}
+		displayBoard(board); //displaying the updated board
+		}
+		if (current == 'F') //return from the isDraw() method that determines if the game is a draw
+			System.out.println("The game resulted in a draw.");
+		else //if isWon() returned something other than'F' it will display this
+			System.out.println("The winner is " + current + ".");
+	}
+	//The method displayBoard() is used to display the tic-tac-toe board in a formatted fashion
+	public static void displayBoard(char[][] board)
+	{
+		System.out.println("-------------");
+		for (int i = 0; i < board.length; i++)
+		{
+			for(int j = 0; j < board[1].length; j++)
+			{
+				System.out.printf("%-2s%-2s", "| ", board[j][i]);
+			}
+			System.out.println("|");
+			System.out.println("-------------");
+		}
+	}
+	//The method isWon is used to check if a player has won and then returns a character based
+	//on the result.  If no player has won it will return an already declared variable (ch),
+	//which is 'F', to line 37
+	public static char isWon(char ch, char[][] board) 
+	{
+		if (board[0][0] == board[0][1] && board[0][0] == board[0][2] && board[0][0] != ' ')
+			ch = board[0][0]; //checking row 1
+		if (board[1][0] == board[1][1] && board[1][0] == board[1][2] && board[1][0] != ' ')
+			ch = board[1][0]; //checking row 2
+		if (board[2][0] == board[2][1] && board[2][0] == board[2][2] && board[2][0] != ' ')
+			ch = board[2][0]; //checking row 3
+		if (board[0][0] == board[1][0] && board[0][0] == board[2][0] && board[0][0] != ' ')
+			ch = board[0][0]; //checking column 1
+		if (board[0][1] == board[1][1] && board[0][1] == board[2][1] && board[0][1] != ' ')
+			ch = board[0][1]; //checking column 2
+		if (board[0][2] == board[1][2] && board[0][2] == board[2][2] && board[0][2] != ' ')
+			ch = board[0][2]; //checking column 3
+		if (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] != ' ')
+			ch = board[0][0]; //checking diagonal 1
+		if (board[2][0] == board[1][1] && board[2][0] == board[0][2] && board[2][0] != ' ')
+			ch = board[0][2]; //checking diagonal 2
+		return ch; //returning the current value of ch to line 37
+	}
+	//The method isDraw() initializes a char (ch) to a character (T) to represent true and if it is
+	//determined that the board is not full then it returns 'F' (representation of false) to line 37
+	public static char isDraw(char[][] board) 
+	{
+		char ch = 'T';
+		for (int i = 0; i < board.length; i++)
+			for (int j = 0; j < board[i].length; j++)
+			{
+				if (board[i][j] == ' ')
+				{
+						ch = 'F';
+				}		
+			}
+		return ch;
+	}
+}
